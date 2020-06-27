@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="principal">
+        <menu>
+            <item
+                android:id="@+id/home"
+                android:icon="@drawable/ic_home"
+                android:title="Inicio"
+                >
+            </item>
+            <item
+                android:id="@+id/account"
+                android:icon="@drawable/ic_account_circle"
+                android:title="mi cuenta"
+                >
+            </item>
+            <item
+                android:id="@+id/Perfil"
+                android:icon="@drawable/ic_settings"
+                android:title="Perfil"
+                >
+            </item>
+            <item
+                android:id="@+id/MisPedidos"
+                android:icon="@drawable/ic_take_note"
+                android:title="Mis Pedidos"
+                >
+            </item>
+
+            <!--
+            <item
+                android:id="@+id/CerrarSesion"
+                android:icon="@drawable/ic_turn_off"
+                android:title="Cerrar Sesión"
+                >
+
+            </item>
+             -->
+        </menu>
+    </item>
+
+    <!--
+    <item android:title="Secundario">
+        <menu>
+            <item
+                android:icon="@drawable/ic_settings"
+                android:title="Metodos de Pago"
+                >
+            </item>
+            <item
+                android:icon="@drawable/ic_settings"
+                android:title="algo mas"
+                >
+            </item>
+            <item
+                android:icon="@drawable/ic_settings"
+                android:title="algo mas"
+                >
+            </item>
+        </menu>
+    </item>
+    -->
+
+</menu>

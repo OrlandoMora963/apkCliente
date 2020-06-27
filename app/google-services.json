@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "475591709293",
+    "firebase_url": "https://rayodj.firebaseio.com",
+    "project_id": "rayodj",
+    "storage_bucket": "rayodj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475591709293:android:ff02164a5f59645626e564",
+        "android_client_info": {
+          "package_name": "com.cor.frii"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475591709293-hj7kdicvb9pejlvdsl722honrd6f5jck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9GiR2XO7PMjhZIE-18U6lk1MFGSMGLvo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475591709293-hj7kdicvb9pejlvdsl722honrd6f5jck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
