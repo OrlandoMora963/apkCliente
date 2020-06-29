@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cor.frii.pojo.Product;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -75,13 +76,11 @@ public class ProductAdapterNew extends RecyclerView.Adapter<ProductAdapterNew.vi
         ImageView productImage;
         Button Ver_Distribuidores;
 
-        View view;
-
         viewHolder(@NonNull View itemView) {
             super(itemView);
             Name_product = itemView.findViewById(R.id.Name_product_detail);
             Ver_Distribuidores=itemView.findViewById(R.id.Ver_Distribuidores);
-
+            productImage=itemView.findViewById(R.id.ProductImage);
             Ver_Distribuidores.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -102,8 +101,7 @@ public class ProductAdapterNew extends RecyclerView.Adapter<ProductAdapterNew.vi
         void bind(final Product product) {
 
             Name_product.setText(product.getName());
-
-
+            Picasso.get().load(product.getUrl()).into(productImage);
         }
 
 

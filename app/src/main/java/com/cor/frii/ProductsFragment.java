@@ -229,8 +229,6 @@ public class ProductsFragment extends Fragment {
                         }
                     }
                 });
-
         VolleySingleton.getInstance(getContext()).addToRequestQueue(arrayRequest);
-
     }
 }

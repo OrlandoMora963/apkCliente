@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cor.frii.pojo.Product;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -58,18 +59,17 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
 
 
         Button button_5_kilos,button_10_kilos,button_15_kilos,button_45_kilos;
-        ImageView imageView;
-        TextView gas_name;
+        ImageView ProductGasImage;
+        TextView GasDetailName;
 
         viewHolder(@NonNull final View itemView) {
             super(itemView);
-
             button_5_kilos=itemView.findViewById(R.id.Button_5_Kilos);
             button_10_kilos=itemView.findViewById(R.id.Button_10_Kilos);
             button_15_kilos=itemView.findViewById(R.id.Button_15_Kilos);
             button_45_kilos=itemView.findViewById(R.id.Button_45_Kilos);
-            gas_name=itemView.findViewById(R.id.GasDetailName);
-
+            GasDetailName=itemView.findViewById(R.id.GasDetailName);
+            ProductGasImage=itemView.findViewById(R.id.ProductGasImage);
             button_5_kilos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -126,8 +126,8 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
         }
 
         void bind(final Product product) {
-            gas_name.setText(product.getName());
-
+            GasDetailName.setText(product.getName());
+            Picasso.get().load(product.getUrl()).into(ProductGasImage);
         }
     }
 

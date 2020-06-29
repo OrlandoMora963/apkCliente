@@ -158,7 +158,7 @@ public class BrandsFragment extends Fragment {
                         brandsTitle = brandsTitle.toLowerCase();
                         Toast.makeText(getContext(), brandsTitle, Toast.LENGTH_SHORT).show();
                         if (brandsTitle.equals("gas normal") || brandsTitle.equals("gas premium")) {
-                            GasFragment gasFragment = new GasFragment();
+                            GasNewFragment gasNewFragment = new GasNewFragment();
                             Bundle b = new Bundle();
                             if (brandsTitle.equals("gas normal")) {
                                 b.putString("type", "gas-normal");
@@ -166,18 +166,14 @@ public class BrandsFragment extends Fragment {
                                 b.putString("type", "gas-premium");
 
                             }
-                            gasFragment.setArguments(b);
-
-
-                            transaction.replace(R.id.mainContainer, new GasNewFragment());
-                            transaction.addToBackStack(null);
-                            transaction.commit();
+                            gasNewFragment.setArguments(b);
+                            transaction.replace(R.id.mainContainer, gasNewFragment);
                         } else {
-                            GasCisternaFragment gasCisternaFragment = new GasCisternaFragment();
+                           GasCisternaFragment gasCisternaFragment = new GasCisternaFragment();
                             transaction.replace(R.id.mainContainer, gasCisternaFragment);
-                            transaction.addToBackStack(null);
-                            transaction.commit();
                         }
+                        transaction.addToBackStack(null);
+                        transaction.commit();
 
                     }
                 });
@@ -221,20 +217,17 @@ public class BrandsFragment extends Fragment {
                                     String brandsTitle = brandsList.get(recyclerView.getChildAdapterPosition(v)).getName();
                                     brandsTitle = brandsTitle.toLowerCase();
                                     if (brandsTitle.equals("gas normal") || brandsTitle.equals("gas premium")) {
-                                        GasFragment gasFragment = new GasFragment();
+                                        GasNewFragment gasNewFragment = new GasNewFragment();
                                         Bundle b = new Bundle();
                                         if (brandsTitle.equals("gas normal")) {
                                             b.putString("type", "gas-normal");
                                         } else {
                                             b.putString("type", "gas-premium");
                                         }
-                                        gasFragment.setArguments(b);
-
-
-                                        transaction.replace(R.id.mainContainer, new GasNewFragment());
+                                        gasNewFragment.setArguments(b);
+                                        transaction.replace(R.id.mainContainer, gasNewFragment);
                                         transaction.addToBackStack(null);
                                         transaction.commit();
-
                                     } else if (brandsTitle.equals("camion")) {
                                         GasCisternaFragment gasCisternaFragment = new GasCisternaFragment();
                                         transaction.replace(R.id.mainContainer, gasCisternaFragment);
@@ -243,11 +236,11 @@ public class BrandsFragment extends Fragment {
                                     } else {
                                         Bundle b = new Bundle();
                                         b.putInt("IdMarke", brandsList.get(recyclerView.getChildAdapterPosition(v)).getId());
-                                        ProductsFragment productsFragment = new ProductsFragment();
+                                        ProductNewFragment productsFragment = new ProductNewFragment();
                                         productsFragment.setArguments(b);
 
 
-                                        transaction.replace(R.id.mainContainer, new ProductNewFragment());
+                                        transaction.replace(R.id.mainContainer, productsFragment);
                                         transaction.addToBackStack(null);
                                         transaction.commit();
 
