@@ -110,7 +110,7 @@ public class GasNewFragment extends Fragment {
         return view;
     }
     private void llenarDatos() {
-        products = new ArrayList<>();
+        products = new ArrayList<Product>();
         Bundle b = this.getArguments();
         String type = "";
         if (b != null) {
@@ -134,17 +134,18 @@ public class GasNewFragment extends Fragment {
                                                 object.getJSONObject("detail_measurement_id").getString("name"),
                                         "",
                                         Float.parseFloat(object.getString("unit_price")),
+                                        Float.parseFloat(object.getString("measurement")),
 
-                                        object.getInt("measurement"),
                                         1,
                                         imagen_url,
                                         finalType,
-                                        object.getJSONObject("marke_id").getString("name"));
+                                        object.getJSONObject("marke_id").getString("name")
+                                        ,Integer.parseInt(object.getJSONObject("marke_id").getString("id")));
 
                                 products.add(product);
                             }
 
-                            gasProductAdapter = new GasProductAdapterNew(products);
+                            gasProductAdapter = new GasProductAdapterNew(products,finalType);
                             recyclerView.setAdapter(gasProductAdapter);
                         } catch (Exception e) {
                             e.printStackTrace();

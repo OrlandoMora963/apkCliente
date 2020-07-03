@@ -21,7 +21,6 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.cor.frii.Login.LoginActivity;
 import com.cor.frii.persistence.Session;
@@ -148,7 +147,7 @@ public class GasFragment extends Fragment {
     }
 
     private void llenarDatos() {
-        products = new ArrayList<>();
+        products = new ArrayList<Product>();
         Bundle b = this.getArguments();
         String type = "";
         if (b != null) {
@@ -178,7 +177,8 @@ public class GasFragment extends Fragment {
                                         1,
                                         imagen_url,
                                         finalType,
-                                        object.getJSONObject("marke_id").getString("name"));
+                                        object.getJSONObject("marke_id").getString("name")
+                               );
 
                                 products.add(product);
                             }

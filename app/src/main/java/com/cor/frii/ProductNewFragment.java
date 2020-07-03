@@ -116,7 +116,7 @@ public class ProductNewFragment extends Fragment {
             Toast.makeText(getContext(), "No se pudo cargar la Información", Toast.LENGTH_LONG).show();
         }
 
-        products = new ArrayList<>();
+        products = new ArrayList<Product>();
 
         JSONArray jsonArray = new JSONArray();
         JsonArrayRequest arrayRequest =

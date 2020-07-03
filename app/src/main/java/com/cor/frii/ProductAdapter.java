@@ -18,22 +18,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cor.frii.persistence.DatabaseClient;
 import com.cor.frii.persistence.entity.ECart;
 import com.cor.frii.pojo.Product;
+import com.cor.frii.pojo.ProductGas;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.viewHolder> implements View.OnClickListener {
 
 
-    List<Product> products;
+    ArrayList<Product> products;
     private Context context;
     private View.OnClickListener listener;
 
     private TextView badge_count;
     private View view_badge;
 
-    public ProductAdapter(List<Product> products) {
+    public ProductAdapter(ArrayList<Product> products) {
         this.products = products;
     }
 

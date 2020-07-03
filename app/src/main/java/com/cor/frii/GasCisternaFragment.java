@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.*;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.cor.frii.Login.LoginActivity;
 import com.cor.frii.persistence.Session;
@@ -56,7 +55,7 @@ public class GasCisternaFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.ProductsContainer);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        products = new ArrayList<>();
+        products = new ArrayList<Product>();
 
         llenarDatos();
         return view;

@@ -12,18 +12,43 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.cor.frii.Login.LoginActivity;
 import com.cor.frii.persistence.DatabaseClient;
 import com.cor.frii.persistence.Session;
+import com.cor.frii.persistence.entity.Acount;
 import com.cor.frii.persistence.entity.ECart;
+import com.cor.frii.utils.MapSelection;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -46,14 +71,16 @@ public class CartdetailFragment extends Fragment implements CartDetailAdapter.Ev
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
-
+    private String baseURL = "http://34.71.251.155/api";
+    private String HOST_NODEJS = "http://34.71.251.155:9000";
+    private static final String TAG = "GAS";
+    private Socket socket;
     private CartDetailAdapter cartDetailAdapter;
     private RecyclerView recyclerView;
     List<ECart> cartDetails;
     Button procesarPedido;
     private TextView lblTotal;
-
+    private RadioButton voucher;
     public CartdetailFragment() {
         // Required empty public constructor
     }
@@ -94,6 +121,7 @@ public class CartdetailFragment extends Fragment implements CartDetailAdapter.Ev
             System.out.println("LAS CREDENCIALES SON INVALIDAS");
         }
         //--
+        initSocket();
     }
 
     @Override
@@ -104,7 +132,7 @@ public class CartdetailFragment extends Fragment implements CartDetailAdapter.Ev
         recyclerView = view.findViewById(R.id.CartDetailContainer);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         lblTotal = view.findViewById(R.id.lblTotal);
-
+        voucher = view.findViewById(R.id.RadioButtonBoleta);
         llenarCarrito();
 
         procesarPedido = view.findViewById(R.id.ButtonCartProcesarPedido);
@@ -121,8 +149,14 @@ public class CartdetailFragment extends Fragment implements CartDetailAdapter.Ev
         } else {
             procesarPedido.setEnabled(true);
         }
-
         procesarPedido.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                confirmarPedido();
+            }
+        });
+      /*  procesarPedido.setOnClickListener(new View.OnClickListener() {
             FragmentManager manager = getActivity().getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
 
@@ -134,14 +168,127 @@ public class CartdetailFragment extends Fragment implements CartDetailAdapter.Ev
                 transaction.addToBackStack(null);
                 transaction.commit();
 
-                 */
+
             }
-        });
+        });*/
 
 
         return view;
     }
+    // Confirmar pedido
+    private void confirmarPedido() {
+        //Obtener el token del cliente
+        final Acount acount = DatabaseClient.getInstance(getContext())
+                .getAppDatabase()
+                .getAcountDao()
+                .getUser(new Session(getContext()).getToken());
 
+   //     if (lblDireccion.getText().toString().length() == 0 && lblDireccion.getText().toString().equals("")) {
+     //       return;
+       // }
+        String comprobante;
+        switch (voucher.getText().toString()) {
+            case "Factura":
+                comprobante = "factura";
+                break;
+            case "Pagar con targeta":
+                comprobante = "tarjeta";
+                break;
+            default:
+                comprobante = "boleta";
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        RequestQueue queue = Volley.newRequestQueue(Objects.requireNonNull(getContext()));
+        try {
+            jsonObject.put("voucher", comprobante);
+            jsonObject.put("latitud", String.valueOf(MapSelection.latitud));
+            jsonObject.put("longitud", String.valueOf(MapSelection.longitud));
+            jsonObject.put("client_id", new Session(getContext()).getToken());
+
+            JSONArray jsonArray = new JSONArray();
+            List<ECart> eCarts = DatabaseClient.getInstance(getContext())
+                    .getAppDatabase()
+                    .getCartDao()
+                    .getCarts();
+
+            if (eCarts != null) {
+                for (ECart e : eCarts) {
+                    JSONObject orders_detal = new JSONObject();
+                    orders_detal.put("description", e.getName());
+                    orders_detal.put("quantity", e.getCantidad());
+                    orders_detal.put("unit_price", e.getPrice());
+                    jsonArray.put(orders_detal);
+                }
+            }
+
+            jsonObject.put("detalle_orden", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = this.baseURL + "/client/order/";
+        System.out.println(jsonObject.toString());
+        JsonObjectRequest jsonObjectRequest =
+                new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            int status = response.getInt("status");
+                            if (status == 201) {
+                                String message = response.getString("message");
+                                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+
+
+                                JSONObject datas = new JSONObject();
+                                datas.put("id", response.getJSONObject("data").getInt("order_id"));
+                                datas.put("latitude", MapSelection.latitud    );
+                                datas.put("longitude", MapSelection.longitud);
+                                socket.emit("get orders", datas);
+
+                                DatabaseClient.getInstance(getContext())
+                                        .getAppDatabase()
+                                        .getCartDao()
+                                        .deleteAllCart();
+
+                                Intent intent = new Intent(getContext(), PedidosActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Volley get", "error voley" + error.toString());
+                        NetworkResponse response = error.networkResponse;
+                        if (error instanceof ServerError && response != null) {
+                            try {
+                                String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                System.out.println(res);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> headers = new HashMap<>();
+                        Log.d("Voley get", acount.getToken());
+                        headers.put("Authorization", "JWT " + acount.getToken());
+                        headers.put("Content-Type", "application/json");
+                        return headers;
+                    }
+                };
+
+        queue.add(jsonObjectRequest);
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -190,6 +337,98 @@ public class CartdetailFragment extends Fragment implements CartDetailAdapter.Ev
 
         cartDetailAdapter = new CartDetailAdapter(cartDetails, this);
         recyclerView.setAdapter(cartDetailAdapter);
+
+
+    }
+
+    private void initSocket() {
+
+        int id_user = new Session(getContext()).getToken();
+        JSONObject data = new JSONObject();
+        Acount cuenta = DatabaseClient.getInstance(getContext())
+                .getAppDatabase()
+                .getAcountDao()
+                .getUser(id_user);
+
+        final JSONObject json_connect = new JSONObject();
+        IO.Options opts = new IO.Options();
+        // opts.forceNew = true;
+        opts.reconnection = true;
+        opts.query = "auth_token=thisgo77";
+        try {
+            json_connect.put("ID", "US01");
+            json_connect.put("TOKEN", cuenta.getToken());
+            json_connect.put("ID_CLIENT", id_user);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            socket = IO.socket(HOST_NODEJS, opts);
+            socket.connect();
+            // SOCKET.io().reconnectionDelay(10000);
+            Log.d(TAG, "Node connect ok");
+            //conect();
+        } catch (URISyntaxException e) {
+            Log.d(TAG, "Node connect error");
+        }
+
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                Log.d(TAG, "emitiendo new conect");
+                JSONObject data = new JSONObject();
+                int id = new Session(getContext()).getToken();
+                Acount cuenta = DatabaseClient.getInstance(getContext())
+                        .getAppDatabase()
+                        .getAcountDao()
+                        .getUser(id);
+                try {
+                    data.put("ID", cuenta.getId());
+                    data.put("type", "client");
+                    Log.d(TAG, "conect " + data.toString());
+                    socket.emit("new connect", data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                Log.d(TAG, "SERVER connect " + date);
+
+
+            }
+        });
+
+        socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                Log.d(TAG, "SERVER disconnect " + date);
+            }
+        });
+
+        socket.on(Socket.EVENT_RECONNECT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String my_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                Log.d(TAG, "SERVER reconnect " + my_date);
+            }
+        });
+
+        socket.on(Socket.EVENT_CONNECT_TIMEOUT, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String my_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                Log.d(TAG, "SERVER timeout " + my_date);
+            }
+        });
+
+        socket.on(Socket.EVENT_RECONNECTING, new Emitter.Listener() {
+            @Override
+            public void call(Object... args) {
+                String my_date = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                Log.d(TAG, "SERVER reconnecting " + my_date);
+            }
+        });
 
 
     }

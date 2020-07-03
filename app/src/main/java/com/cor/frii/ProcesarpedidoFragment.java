@@ -83,6 +83,7 @@ public class ProcesarpedidoFragment extends Fragment implements OnMapReadyCallba
     private Address address;
     private String baseURL = "http://34.71.251.155/api";
     private String HOST_NODEJS = "http://34.71.251.155:9000";
+
     private Thread thread = null;
 
     private Context context;

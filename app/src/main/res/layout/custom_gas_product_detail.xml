@@ -56,7 +56,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/Button_45_Kilos"
+                android:id="@+id/productButtonAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
@@ -71,7 +71,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ProductGasCantidad"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                app:layout_constraintTop_toBottomOf="@+id/txtPrecio" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -85,6 +85,7 @@
                 android:textColor="@color/subtitle"
                 app:layout_constraintBottom_toTopOf="@+id/textView16"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/ProductGasImage"
                 app:layout_constraintTop_toBottomOf="@+id/GasDetailName" />
 
@@ -92,13 +93,13 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cantida"
+                android:text="Cantidad"
                 android:textColor="@color/marcasTitle"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/ProductGasCantidad"
-                app:layout_constraintEnd_toStartOf="@+id/Button_45_Kilos"
+                app:layout_constraintEnd_toStartOf="@+id/productButtonAdd"
                 app:layout_constraintStart_toEndOf="@+id/ProductGasImage"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                app:layout_constraintTop_toBottomOf="@+id/txtPrecio" />
 
             <EditText
                 android:id="@+id/ProductGasCantidad"
@@ -112,7 +113,7 @@
                 android:textColor="@color/marcasTitle"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/Button_45_Kilos"
+                app:layout_constraintEnd_toStartOf="@+id/productButtonAdd"
                 app:layout_constraintStart_toEndOf="@+id/ProductGasImage"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -124,12 +125,12 @@
 
                 android:text="Precio: "
                 app:layout_constraintBottom_toTopOf="@+id/textView4"
-                app:layout_constraintEnd_toStartOf="@+id/textView15"
+                app:layout_constraintEnd_toStartOf="@+id/txtPrecio"
                 app:layout_constraintStart_toEndOf="@+id/ProductGasImage"
                 app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/txtPrecio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
@@ -147,18 +148,18 @@
                 android:text="Distribuidor: "
 
                 app:layout_constraintBottom_toTopOf="@+id/textView14"
-                app:layout_constraintEnd_toStartOf="@+id/textView17"
+                app:layout_constraintEnd_toStartOf="@+id/txtDistribuidor"
                 app:layout_constraintStart_toEndOf="@+id/ProductGasImage"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/txtDistribuidor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
 
                 android:text="SRC. solgas"
-                app:layout_constraintBottom_toTopOf="@+id/textView15"
+                app:layout_constraintBottom_toTopOf="@+id/txtPrecio"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView16"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />

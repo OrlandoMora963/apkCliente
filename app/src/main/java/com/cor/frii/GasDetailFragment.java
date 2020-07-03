@@ -11,8 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.cor.frii.pojo.Product;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.cor.frii.pojo.ProductStaff;
+import com.cor.frii.utils.MapSelection;
+import com.cor.frii.utils.MyJsonArrayRequest;
+import com.cor.frii.utils.VolleySingleton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -34,12 +47,13 @@ public class GasDetailFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    public int product_id = 0;
+    public String Description="";
     private OnFragmentInteractionListener mListener;
 
     private GasProductDetailAdapter gasProductDetailAdapter;
     private RecyclerView recyclerView;
-    ArrayList<Product> products;
+    ArrayList<ProductStaff> products;
 
     public GasDetailFragment() {
         // Required empty public constructor
@@ -79,7 +93,7 @@ public class GasDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gas_detail, container, false);
         recyclerView = view.findViewById(R.id.ProductGasDetailContainer);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+/*
         products=new ArrayList<>();
         products.add(new Product(1,"solgas de 5kilos ","",2,2,2,"","",""));
         products.add(new Product(2,"solgas de 5kilos ","",2,2,2,"","",""));
@@ -87,9 +101,56 @@ public class GasDetailFragment extends Fragment {
 
         gasProductDetailAdapter=new GasProductDetailAdapter(products);
         recyclerView.setAdapter(gasProductDetailAdapter);
-
+*/
+        ListarDatos();
         return view;
 
+    }
+
+    public void ListarDatos() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("product_id", product_id);
+            object.put("latitude", MapSelection.latitud);
+            object.put("longitude", MapSelection.longitud);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = "http://34.71.251.155/api/products/staff";
+        MyJsonArrayRequest objectRequest = new MyJsonArrayRequest(Request.Method.POST,
+                url,
+                object,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            recyclerView.setAdapter(null);
+                            Gson gson = new Gson();
+                            products = gson.fromJson(response.toString(), new TypeToken<ArrayList<ProductStaff>>() {
+                            }.getType());
+                            for (ProductStaff item : products) {
+                                    item.getProductID().setImage("http://34.71.251.155/" + item.getProductID().getImage());
+
+                                    item.getProductID().setDescription(Description);
+                            }
+                            if (products.size() == 0) {
+                                Toast.makeText(getContext(), "No hay proveedores con ese producto", Toast.LENGTH_SHORT).show();
+                            }
+                            gasProductDetailAdapter = new GasProductDetailAdapter(products);
+                            recyclerView.setAdapter(gasProductDetailAdapter);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(objectRequest);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

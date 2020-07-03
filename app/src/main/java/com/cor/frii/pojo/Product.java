@@ -6,13 +6,22 @@ public class Product {
     private String Name;
     private String Description;
     private float Price;
-    private int UnitMeasurement;
+    private float UnitMeasurement;
     private int Size;
     private String Url;
     private String type;
     private String marke;
+    private int markeId;
 
-    public Product(int id, String name, String description, float price, int unitMeasurement, int size, String url, String type, String marke) {
+    public int getMarkeId() {
+        return markeId;
+    }
+
+    public void setMarkeId(int markeId) {
+        this.markeId = markeId;
+    }
+    public Product(int id, String name, String description, float price, float unitMeasurement, int size, String url, String type, String marke
+                  ) {
         Id = id;
         Name = name;
         Description = description;
@@ -23,6 +32,20 @@ public class Product {
 
         this.type = type;
         this.marke = marke;
+    }
+    public Product(int id, String name, String description, float price, float unitMeasurement, int size, String url, String type, String marke,
+    int markeId) {
+        Id = id;
+        Name = name;
+        Description = description;
+        Price = price;
+        UnitMeasurement = unitMeasurement;
+        Size = size;
+        Url = url;
+
+        this.type = type;
+        this.marke = marke;
+        this.markeId=markeId;
     }
 
     public String getType() {
@@ -73,11 +96,11 @@ public class Product {
         Price = price;
     }
 
-    public int getUnitMeasurement() {
+    public float getUnitMeasurement() {
         return UnitMeasurement;
     }
 
-    public void setUnitMeasurement(int unitMeasurement) {
+    public void setUnitMeasurement(float unitMeasurement) {
         UnitMeasurement = unitMeasurement;
     }
 

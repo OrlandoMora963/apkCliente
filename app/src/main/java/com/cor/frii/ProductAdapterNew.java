@@ -15,8 +15,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cor.frii.pojo.Product;
+import com.cor.frii.pojo.ProductGas;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapterNew extends RecyclerView.Adapter<ProductAdapterNew.viewHolder> implements View.OnClickListener {
@@ -29,7 +31,7 @@ public class ProductAdapterNew extends RecyclerView.Adapter<ProductAdapterNew.vi
     private TextView badge_count;
     private View view_badge;
 
-    public ProductAdapterNew(List<Product> products) {
+    public ProductAdapterNew(ArrayList<Product> products) {
         this.products = products;
     }
 
@@ -81,20 +83,6 @@ public class ProductAdapterNew extends RecyclerView.Adapter<ProductAdapterNew.vi
             Name_product = itemView.findViewById(R.id.Name_product_detail);
             Ver_Distribuidores=itemView.findViewById(R.id.Ver_Distribuidores);
             productImage=itemView.findViewById(R.id.ProductImage);
-            Ver_Distribuidores.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AppCompatActivity activity=(InicioMapsActivity) v.getContext();
-                    FragmentManager manager=activity.getSupportFragmentManager();
-                    FragmentTransaction transaction=manager.beginTransaction();
-                    transaction.replace(R.id.mainContainer, new ProductDetailFragment());
-                    transaction.commit();
-                    transaction.addToBackStack(null);
-                }
-            });
-
-
-
 
         }
 
@@ -102,6 +90,19 @@ public class ProductAdapterNew extends RecyclerView.Adapter<ProductAdapterNew.vi
 
             Name_product.setText(product.getName());
             Picasso.get().load(product.getUrl()).into(productImage);
+            Ver_Distribuidores.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AppCompatActivity activity=(InicioMapsActivity) v.getContext();
+                    FragmentManager manager=activity.getSupportFragmentManager();
+                    FragmentTransaction transaction=manager.beginTransaction();
+                    ProductDetailFragment oProductDetailFragment=new ProductDetailFragment();
+                    oProductDetailFragment.product_id=product.getId();
+                    transaction.replace(R.id.mainContainer,oProductDetailFragment );
+                    transaction.commit();
+                    transaction.addToBackStack(null);
+                }
+            });
         }
 
 

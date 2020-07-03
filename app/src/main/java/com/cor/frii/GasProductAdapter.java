@@ -29,12 +29,15 @@ import com.android.volley.toolbox.Volley;
 import com.cor.frii.persistence.DatabaseClient;
 import com.cor.frii.persistence.entity.ECart;
 import com.cor.frii.pojo.Product;
+import com.cor.frii.pojo.ProductGas;
 
 import com.squareup.picasso.Picasso;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GasProductAdapter extends RecyclerView.Adapter<GasProductAdapter.viewHolder> implements View.OnClickListener {
@@ -44,7 +47,7 @@ public class GasProductAdapter extends RecyclerView.Adapter<GasProductAdapter.vi
     private Context context;
 
 
-    public GasProductAdapter(List<Product> products) {
+    public GasProductAdapter(ArrayList<Product> products) {
         this.products = products;
     }
 
@@ -112,22 +115,17 @@ public class GasProductAdapter extends RecyclerView.Adapter<GasProductAdapter.vi
         }
 
         void bind(final Product product) {
-
             double precio = 0.0;
             float price = 0;
-
             productGasCantidad.setText("1");
-
             gasProductTitle.setText(product.getName());
             Picasso.get().load(product.getUrl()).into(gasProductImage);
-
             productGasAddCart.setOnClickListener(new View.OnClickListener() {
 
 
                 @Override
                 public void onClick(View v) {
                     String marke = product.getMarke();
-
                     final String pesoText = peso.getText().toString();
                     final int cantidad = Integer.parseInt(productGasCantidad.getText().toString());
 
