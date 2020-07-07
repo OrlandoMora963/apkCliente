@@ -191,7 +191,7 @@ public class CartdetailFragment extends Fragment implements CartDetailAdapter.Ev
             case "Factura":
                 comprobante = "factura";
                 break;
-            case "Pagar con targeta":
+            case "Pagar con tarjeta":
                 comprobante = "tarjeta";
                 break;
             default:

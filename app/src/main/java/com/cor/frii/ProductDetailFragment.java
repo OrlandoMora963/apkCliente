@@ -103,6 +103,10 @@ public class ProductDetailFragment extends Fragment {
         ListarDatos();
         return view;
     }
+    public void onResume() {
+        ListarDatos();
+        super.onResume();
+    }
     public  void ListarDatos(){
         JSONObject object = new JSONObject();
         try {

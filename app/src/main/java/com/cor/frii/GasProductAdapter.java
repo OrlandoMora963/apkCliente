@@ -155,6 +155,7 @@ public class GasProductAdapter extends RecyclerView.Adapter<GasProductAdapter.vi
                                             eCart.setPrice((float) precio);
                                             eCart.setCantidad(cantidad);
                                             eCart.setTotal((float) (cantidad * precio));
+
                                             DatabaseClient.getInstance(context)
                                                     .getAppDatabase()
                                                     .getCartDao()

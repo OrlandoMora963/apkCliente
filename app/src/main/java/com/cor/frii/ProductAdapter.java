@@ -140,7 +140,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.viewHold
                                 .getAppDatabase()
                                 .getCartDao()
                                 .addCart(eCart);
-                        Toast.makeText(context, "Agregado al Carrito", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, eCart.getUid(), Toast.LENGTH_LONG).show();
                         CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
                     } else {
                         Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_LONG).show();

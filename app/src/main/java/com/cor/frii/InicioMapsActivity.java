@@ -87,14 +87,14 @@ public class InicioMapsActivity extends AppCompatActivity implements NavigationV
         });
     }
     @Override
-    public void onRestart(){
-        super.onRestart();
+    public void onResume(){
+        super.onResume();
         List<ECart> cartDetails = DatabaseClient.getInstance(this)
                 .getAppDatabase()
                 .getCartDao()
                 .getCarts();
         if(cartDetails.size()>0)
-            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
+            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
         else
             CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#065FD3")));
 

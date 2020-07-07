@@ -87,7 +87,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
             productCantidad = itemView.findViewById(R.id.ProductCantidad);
             txtDistribuidor = itemView.findViewById(R.id.txtDistribuidor);
             txtPrecio = itemView.findViewById(R.id.txtPrecio);
-            productButtonAdd=itemView.findViewById(R.id.productButtonAdd);
+            productButtonAdd = itemView.findViewById(R.id.productButtonAdd);
         }
 
         void bind(final ProductStaff product) {
@@ -97,28 +97,69 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
             productCantidad.setText("1");
             txtPrecio.setText(String.valueOf(product.getPrice()));
             txtDistribuidor.setText(product.getCompanyID().getName());
+            boolean IsExistsButton = false;
+            for (ECart item : DatabaseClient.getInstance(context)
+                    .getAppDatabase()
+                    .getCartDao()
+                    .getCarts()) {
+                if (item.getProductRegister() == product.getID())
+                    IsExistsButton = true;
+                break;
+            }
+            if (IsExistsButton) {
+                productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
+                productButtonAdd.setText("Agregado");
+            }
             productButtonAdd.setOnClickListener(new View.OnClickListener() {
 
 
                 @Override
                 public void onClick(View v) {
+                    ECart oECart = null;
+                    for (ECart item : DatabaseClient.getInstance(context)
+                            .getAppDatabase()
+                            .getCartDao()
+                            .getCarts()) {
+                        if (item.getProductRegister() == product.getID())
+                            oECart = item;
+                        break;
+                    }
+                    if (oECart == null) {
+                        ECart eCart = new ECart();
+                        eCart.setName(product.getProductID().getDescription());
+                        eCart.setPrice(product.getPrice());
+                        //productDescription.setVisibility(View.INVISIBLE);
+                        //badge_visible();
+                        if (productCantidad.getText().length() > 0) {
+                            eCart.setCantidad(Integer.parseInt(productCantidad.getText().toString()));
+                            eCart.setTotal((Float.parseFloat(productCantidad.getText().toString()) * product.getPrice()));
+                            eCart.setProductRegister(product.getID());
+                            DatabaseClient.getInstance(context)
+                                    .getAppDatabase()
+                                    .getCartDao()
+                                    .addCart(eCart);
+                            productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
+                            productButtonAdd.setText("Agregado");
+                            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
+                            Toast.makeText(context, "Agregado al Carrito", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
 
-                                       ECart eCart = new ECart();
-                    eCart.setName(product.getProductID().getDescription());
-                    eCart.setPrice(product.getPrice());
-                    //productDescription.setVisibility(View.INVISIBLE);
-                    //badge_visible();
-                    if (productCantidad.getText().length() > 0) {
-                        eCart.setCantidad(Integer.parseInt(productCantidad.getText().toString()));
-                        eCart.setTotal( (Float.parseFloat(productCantidad.getText().toString()) * product.getPrice()));
+
                         DatabaseClient.getInstance(context)
                                 .getAppDatabase()
                                 .getCartDao()
-                                .addCart(eCart);
-                        CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
-                        Toast.makeText(context, "Agregado al Carrito", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_LONG).show();
+                                .deleteCart(oECart);
+                        if (DatabaseClient.getInstance(context)
+                                .getAppDatabase()
+                                .getCartDao()
+                                .getCarts().size()  == 0)
+                            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#065FD3")));
+                        productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#065FD3")));
+                        productButtonAdd.setText("Agregar");
+                        Toast.makeText(context, "Eliminado del Carrito", Toast.LENGTH_SHORT).show();
                     }
 
                 }
