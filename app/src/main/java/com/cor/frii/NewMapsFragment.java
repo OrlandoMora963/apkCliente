@@ -202,7 +202,7 @@ private  int RamdomHelp= -1;
 
                                     Picasso.get().load(ListMessage.get(randomIndex).getImage()).into(imgvMensajes);
                                 RamdomHelp =randomIndex;
-                                handler.postDelayed(this, 2500);
+                                handler.postDelayed(this, 3000);
 
                             }
                         }, 100);
