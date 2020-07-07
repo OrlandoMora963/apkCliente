@@ -104,8 +104,9 @@ public class ProductDetailFragment extends Fragment {
         return view;
     }
     public void onResume() {
-        ListarDatos();
         super.onResume();
+        ListarDatos();
+
     }
     public  void ListarDatos(){
         JSONObject object = new JSONObject();

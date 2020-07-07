@@ -95,7 +95,6 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
                         GasDetailFragment oGasDetailFragment = new GasDetailFragment();
                         oGasDetailFragment.product_id = ProductId;
                         oGasDetailFragment.Description=Name +" "+Measurent+" Kilos";
-
                         transaction.replace(R.id.mainContainer, oGasDetailFragment);
                         transaction.commit();
                         transaction.addToBackStack(null);

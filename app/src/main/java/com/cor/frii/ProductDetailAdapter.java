@@ -146,8 +146,6 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
                             Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-
-
                         DatabaseClient.getInstance(context)
                                 .getAppDatabase()
                                 .getCartDao()
@@ -161,7 +159,6 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
                         productButtonAdd.setText("Agregar");
                         Toast.makeText(context, "Eliminado del Carrito", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             });
         }

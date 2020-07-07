@@ -116,36 +116,73 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.viewHold
 
 
             Picasso.get().load(product.getUrl()).into(productImage);
-
+            boolean IsExistsButton = false;
+            for (ECart item : DatabaseClient.getInstance(context)
+                    .getAppDatabase()
+                    .getCartDao()
+                    .getCarts()) {
+                if (item.getProductRegister() == product.getId())
+                    IsExistsButton = true;
+                break;
+            }
+            if (IsExistsButton) {
+                productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
+                productButtonAdd.setText("Agregado");
+            }
             productButtonAdd.setOnClickListener(new View.OnClickListener() {
 
 
                 @Override
                 public void onClick(View v) {
 
-                    ECart eCart = new ECart();
-                    eCart.setName(product.getName());
-                    eCart.setPrice(product.getPrice());
+                    ECart oECart = null;
+                    for (ECart item : DatabaseClient.getInstance(context)
+                            .getAppDatabase()
+                            .getCartDao()
+                            .getCarts()) {
+                        if (item.getProductRegister() == product.getId())
+                            oECart = item;
+                        break;
+                    }
+                    if (oECart == null) {
+                        ECart eCart = new ECart();
+                        eCart.setName(product.getName());
+                        eCart.setPrice(product.getPrice());
+                        //productDescription.setVisibility(View.INVISIBLE);
 
+                        //badge_visible();
 
+                        if (productCantidad.getText().length() > 0) {
+                            eCart.setCantidad(Integer.parseInt(productCantidad.getText().toString()));
+                            eCart.setTotal(Float.parseFloat(productCantidad.getText().toString()) * product.getPrice());
+                            eCart.setProductRegister(product.getId());
+                            DatabaseClient.getInstance(context)
+                                    .getAppDatabase()
+                                    .getCartDao()
+                                    .addCart(eCart);
+                            productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
+                            productButtonAdd.setText("Agregado");
+                            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
+                            Toast.makeText(context, "Agregado al Carrito", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_LONG).show();
+                        }
 
-                    //productDescription.setVisibility(View.INVISIBLE);
-
-                    //badge_visible();
-
-                    if (productCantidad.getText().length() > 0) {
-                        eCart.setCantidad(Integer.parseInt(productCantidad.getText().toString()));
-                        eCart.setTotal(Float.parseFloat(productCantidad.getText().toString()) * product.getPrice());
+                    }
+                    else {
                         DatabaseClient.getInstance(context)
                                 .getAppDatabase()
                                 .getCartDao()
-                                .addCart(eCart);
-                        Toast.makeText(context, eCart.getUid(), Toast.LENGTH_LONG).show();
-                        CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
-                    } else {
-                        Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_LONG).show();
+                                .deleteCart(oECart);
+                        if (DatabaseClient.getInstance(context)
+                                .getAppDatabase()
+                                .getCartDao()
+                                .getCarts().size()  == 0)
+                            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#065FD3")));
+                        productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#065FD3")));
+                        productButtonAdd.setText("Agregar");
+                        Toast.makeText(context, "Eliminado del Carrito", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             });
 
