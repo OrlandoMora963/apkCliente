@@ -95,6 +95,7 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
                         GasDetailFragment oGasDetailFragment = new GasDetailFragment();
                         oGasDetailFragment.product_id = ProductId;
                         oGasDetailFragment.Description=Name +" "+Measurent+" Kilos";
+
                         transaction.replace(R.id.mainContainer, oGasDetailFragment);
                         transaction.commit();
                         transaction.addToBackStack(null);
@@ -130,7 +131,7 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
                 @Override
                 public void onClick(View v) {
 
-                    AbrirFragment(v, product.getMarkeId(),  5,product.getName());
+                    AbrirFragment(v, product.getMarkeId(), product.getUnitMeasurement(),product.getName());
 
                 }
             });
@@ -138,21 +139,21 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
             button_10_kilos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirFragment(v, product.getMarkeId(), 10,product.getName());
+                    AbrirFragment(v, product.getMarkeId(), product.getUnitMeasurement(),product.getName());
 
                 }
             });
             button_15_kilos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirFragment(v, product.getMarkeId(), 15,product.getName());
+                    AbrirFragment(v, product.getMarkeId(), product.getUnitMeasurement(),product.getName());
 
                 }
             });
             button_45_kilos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirFragment(v, product.getMarkeId(), 45,product.getName());
+                    AbrirFragment(v, product.getMarkeId(), product.getUnitMeasurement(),product.getName());
 
                 }
             });
