@@ -133,7 +133,7 @@ public class GasProductDetailAdapter extends RecyclerView.Adapter<GasProductDeta
                                     .addCart(eCart);
                             productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
                             productButtonAdd.setText("Agregado");
-                            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
+                            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#64dd17")));
                             Toast.makeText(context, "Agregado al Carrito", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_LONG).show();

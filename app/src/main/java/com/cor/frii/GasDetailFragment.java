@@ -106,7 +106,11 @@ public class GasDetailFragment extends Fragment {
         return view;
 
     }
+    public void onResume() {
+        super.onResume();
+        ListarDatos();
 
+    }
     public void ListarDatos() {
         JSONObject object = new JSONObject();
         try {
