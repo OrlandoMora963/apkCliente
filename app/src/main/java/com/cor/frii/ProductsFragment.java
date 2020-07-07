@@ -187,6 +187,7 @@ public class ProductsFragment extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
+                            recyclerView.setAdapter(null);
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject object = response.getJSONObject(i);
                                 String imagen_url = urlBase + object.getString("image");

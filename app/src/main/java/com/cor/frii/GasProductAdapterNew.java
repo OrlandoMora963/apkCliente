@@ -1,7 +1,9 @@
 package com.cor.frii;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -122,6 +124,9 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
             button_45_kilos = itemView.findViewById(R.id.Button_45_Kilos);
             GasDetailName = itemView.findViewById(R.id.GasDetailName);
             ProductGasImage = itemView.findViewById(R.id.ProductGasImage);
+
+            button_10_kilos.setBackgroundResource(R.drawable.custom_button);
+            button_10_kilos.setTextColor(Color.WHITE);
         }
 
         void bind(final Product product) {
@@ -130,8 +135,15 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
             button_5_kilos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    button_10_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_10_kilos.setTextColor(Color.BLUE);
 
-                    AbrirFragment(v, product.getMarkeId(), product.getUnitMeasurement(),product.getName());
+                    button_15_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_15_kilos.setTextColor(Color.BLUE);
+
+                    button_45_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_45_kilos.setTextColor(Color.BLUE);
+                    AbrirFragment(v, product.getMarkeId(), 5,product.getName());
 
                 }
             });
@@ -139,22 +151,87 @@ public class GasProductAdapterNew extends RecyclerView.Adapter<GasProductAdapter
             button_10_kilos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirFragment(v, product.getMarkeId(), product.getUnitMeasurement(),product.getName());
 
+
+                    button_5_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_5_kilos.setTextColor(Color.BLUE);
+
+                    button_15_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_15_kilos.setTextColor(Color.BLUE);
+
+                    button_45_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_45_kilos.setTextColor(Color.BLUE);
+                    AbrirFragment(v, product.getMarkeId(),10,product.getName());
                 }
             });
             button_15_kilos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirFragment(v, product.getMarkeId(), product.getUnitMeasurement(),product.getName());
 
+                    button_5_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_5_kilos.setTextColor(Color.BLUE);
+
+                    button_10_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_10_kilos.setTextColor(Color.BLUE);
+
+                    button_45_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_45_kilos.setTextColor(Color.BLUE);
+                    AbrirFragment(v, product.getMarkeId(), 15,product.getName());
                 }
             });
             button_45_kilos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AbrirFragment(v, product.getMarkeId(), product.getUnitMeasurement(),product.getName());
+                    button_5_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_5_kilos.setTextColor(Color.BLUE);
 
+                    button_10_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_10_kilos.setTextColor(Color.BLUE);
+
+                    button_15_kilos.setBackgroundResource(R.drawable.custom_button_outline);
+                    button_15_kilos.setTextColor(Color.BLUE);
+                    AbrirFragment(v, product.getMarkeId(), 45,product.getName());
+
+                }
+            });
+            button_5_kilos.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    button_5_kilos.setBackgroundResource(R.drawable.custom_button);
+                    button_5_kilos.setTextColor(Color.WHITE);
+
+                    return false;
+                }
+            });
+
+            button_10_kilos.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    button_10_kilos.setBackgroundResource(R.drawable.custom_button);
+                    button_10_kilos.setTextColor(Color.WHITE);
+
+                    return false;
+                }
+            });
+
+            button_15_kilos.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    button_15_kilos.setBackgroundResource(R.drawable.custom_button);
+                    button_15_kilos.setTextColor(Color.WHITE);
+
+                    return false;
+                }
+            });
+
+
+            button_45_kilos.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    button_45_kilos.setBackgroundResource(R.drawable.custom_button);
+                    button_45_kilos.setTextColor(Color.WHITE);
+
+                    return false;
                 }
             });
         }
