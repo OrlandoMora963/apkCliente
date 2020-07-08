@@ -113,8 +113,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.viewHold
             productCantidad.setText("1");
             productTilte.setText(product.getName());
             productDescription.setText(product.getDescription());
-
-
             Picasso.get().load(product.getUrl()).into(productImage);
             boolean IsExistsButton = false;
             for (ECart item : DatabaseClient.getInstance(context)
