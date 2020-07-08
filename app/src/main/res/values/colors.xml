@@ -3,14 +3,14 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="colorSplash">#1B6BD6</color>
+    <color name="colorSplash">#2979ff</color>
     <color name="marcasTitle">#000</color>
     <color name="buttonAddCart">#46c406</color>
-    <color name="fondoitems">#065FD3</color>
+    <color name="fondoitems">#2979ff</color>
     <color name="textTitleButton">#fff</color>
     <color name="deleteFondo">#f00</color>
     <color name="subtitle">#9b9b9b</color>
-    <color name="frii_Background">#065FD3</color>
+    <color name="frii_Background">#2979ff</color>
 
     <color name="warning">#bb9a00</color>
 

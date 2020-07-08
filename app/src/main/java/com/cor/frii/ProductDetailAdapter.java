@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cor.frii.persistence.DatabaseClient;
@@ -124,6 +125,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
                             oECart = item;
                         break;
                     }
+                    String frii_Background=String.format("#%06x", ContextCompat.getColor(context, R.color.frii_Background) & 0xffffff);
                     if (oECart == null) {
                         ECart eCart = new ECart();
                         eCart.setName(product.getProductID().getDescription());
@@ -154,8 +156,9 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
                                 .getAppDatabase()
                                 .getCartDao()
                                 .getCarts().size()  == 0)
-                            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#065FD3")));
-                        productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#065FD3")));
+                            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(frii_Background)));
+                        productButtonAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(frii_Background)));
+
                         productButtonAdd.setText("Agregar");
                         Toast.makeText(context, "Eliminado del Carrito", Toast.LENGTH_SHORT).show();
                     }
