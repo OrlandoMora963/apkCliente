@@ -19,6 +19,7 @@ import com.cor.frii.persistence.DatabaseClient;
 import com.cor.frii.persistence.entity.ECart;
 import com.cor.frii.pojo.Product;
 import com.cor.frii.pojo.ProductGas;
+import com.cor.frii.utils.CartChangeColor;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
@@ -140,6 +141,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.viewHold
                                 .getCartDao()
                                 .addCart(eCart);
                         Toast.makeText(context, "Agregado al Carrito", Toast.LENGTH_LONG).show();
+                        CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
                     } else {
                         Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_LONG).show();
                     }

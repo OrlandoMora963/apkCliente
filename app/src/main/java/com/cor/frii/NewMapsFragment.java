@@ -2,6 +2,8 @@ package com.cor.frii;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -13,6 +15,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +26,15 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.cor.frii.pojo.Mensaje;
 import com.cor.frii.utils.GpsUtils;
 import com.cor.frii.utils.MapSelection;
 import com.github.nkzawa.socketio.client.Socket;
@@ -37,10 +49,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -79,12 +102,14 @@ public class NewMapsFragment extends Fragment implements OnMapReadyCallback, Goo
 
     private LatLng point_move;
     private Socket socket;
-
+private  int RamdomHelp= -1;
     private RadioGroup groupMetodo, groupMetodoEfectivo;
     private RadioButton voucher;
     private TextView lblDireccion;
     private OnFragmentInteractionListener mListener;
-
+    private ArrayList<Mensaje> ListMessage;
+    private  ImageView imgvMensajes;
+    private Bitmap loadedImage;
     public NewMapsFragment() {
         // Required empty public constructor
     }
@@ -123,14 +148,73 @@ public class NewMapsFragment extends Fragment implements OnMapReadyCallback, Goo
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_new_maps, container, false);
         lblDireccion = view.findViewById(R.id.lblDireccion);
+        imgvMensajes= view.findViewById(R.id.imgvMensajes);
+        imgvMensajes.setBackground(null);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.google_map_pedidos);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+        Listar();
+
         return view;
     }
+    void downloadFile(String imageHttpAddress) {
+        URL imageUrl = null;
+        try {
+            imageUrl = new URL(imageHttpAddress);
+            HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
+            conn.connect();
+            loadedImage = BitmapFactory.decodeStream(conn.getInputStream());
+            imgvMensajes.setImageBitmap(loadedImage);
+        } catch (IOException e) {
+            Toast.makeText(getContext(), "Error cargando la imagen: "+e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+    private void Listar()
+    {
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://34.71.251.155/api/messages");
+        String url = sb.toString();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Gson gson = new Gson();
+                        ListMessage = gson.fromJson(response, new TypeToken<ArrayList<Mensaje>>() {
+                        }.getType());
+                        for (Mensaje item : ListMessage) {
+                            item.setImage("http://34.71.251.155/"+item.getImage());
+                        }
 
+                        final Handler handler = new Handler();
+
+                        handler.postDelayed(new Runnable(){
+                            public void run(){
+                                // download your images here
+                                Random random = new Random();
+                                int  randomIndex = random.nextInt(ListMessage.size());
+
+                                while (RamdomHelp==randomIndex)
+                                    randomIndex = random.nextInt(ListMessage.size());
+
+                                    Picasso.get().load(ListMessage.get(randomIndex).getImage()).into(imgvMensajes);
+                                RamdomHelp =randomIndex;
+                                handler.postDelayed(this, 3000);
+
+                            }
+                        }, 100);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "That didn't work!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        queue.add(stringRequest);
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

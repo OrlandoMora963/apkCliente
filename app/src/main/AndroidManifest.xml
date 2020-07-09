@@ -29,9 +29,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".InicioMapsActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            ></activity>
+
+        <activity
+            android:name=".InicioMapsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Login.TerminosCondicionesActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -48,6 +49,17 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".Login.LoginActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".InicioActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
@@ -56,15 +68,7 @@
         <activity
             android:name=".Login.ForgottenPasswordActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".Login.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".PedidosActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

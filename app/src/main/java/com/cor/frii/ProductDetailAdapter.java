@@ -1,6 +1,8 @@
 package com.cor.frii;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cor.frii.persistence.DatabaseClient;
 import com.cor.frii.persistence.entity.ECart;
 import com.cor.frii.pojo.ProductStaff;
+import com.cor.frii.utils.CartChangeColor;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -100,7 +103,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
                 @Override
                 public void onClick(View v) {
 
-                    ECart eCart = new ECart();
+                                       ECart eCart = new ECart();
                     eCart.setName(product.getProductID().getDescription());
                     eCart.setPrice(product.getPrice());
                     //productDescription.setVisibility(View.INVISIBLE);
@@ -112,6 +115,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
                                 .getAppDatabase()
                                 .getCartDao()
                                 .addCart(eCart);
+                        CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
                         Toast.makeText(context, "Agregado al Carrito", Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_LONG).show();

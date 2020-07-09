@@ -10,14 +10,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.cor.frii.persistence.DatabaseClient;
+import com.cor.frii.persistence.entity.ECart;
+import com.cor.frii.utils.CartChangeColor;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
 
 public class InicioMapsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
     MainFragment.OnFragmentInteractionListener,CategoriesFragment.OnFragmentInteractionListener,
@@ -31,8 +38,6 @@ public class InicioMapsActivity extends AppCompatActivity implements NavigationV
     NavigationView navigationView;
 
 
-
-    FloatingActionButton flo_cart;
     FloatingActionButton flo_order_pedido;
 
     @Override
@@ -60,8 +65,10 @@ public class InicioMapsActivity extends AppCompatActivity implements NavigationV
         transaction.commit();
 
 
-        flo_cart = findViewById(R.id.fad_cart_order);
-        flo_cart.setOnClickListener(new View.OnClickListener() {
+        CartChangeColor.flo_cart = findViewById(R.id.fad_cart_order);
+
+
+        CartChangeColor.flo_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Cart.class);
@@ -78,11 +85,21 @@ public class InicioMapsActivity extends AppCompatActivity implements NavigationV
                 startActivity(intent);
             }
         });
-
+    }
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        List<ECart> cartDetails = DatabaseClient.getInstance(this)
+                .getAppDatabase()
+                .getCartDao()
+                .getCarts();
+        if(cartDetails.size()>0)
+            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
+        else
+            CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#065FD3")));
 
 
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         drawerLayout.closeDrawer(GravityCompat.START);

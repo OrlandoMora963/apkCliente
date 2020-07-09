@@ -176,8 +176,12 @@ public class CategoriesFragment extends Fragment {
                                         object.getInt("id"),
                                         object.getString("name"),
                                         imagen_url);
-                                categories.add(categoria);
+                                if(!categoria.getName().equals("Gas"))
+                                    categories.add(categoria);
+                                else
+                                    categories.add(0,categoria);
                             }
+
                             // Adaptador => para la persistencia de datos
                             categoriesAdapter = new CategoriesAdapter(categories);
                             recyclerView.setAdapter(categoriesAdapter);

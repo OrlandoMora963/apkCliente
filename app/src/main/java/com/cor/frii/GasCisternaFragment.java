@@ -55,7 +55,7 @@ public class GasCisternaFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.ProductsContainer);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        products = new ArrayList<Product>();
+        products = new ArrayList<>();
 
         llenarDatos();
         return view;

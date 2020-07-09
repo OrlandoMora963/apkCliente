@@ -1,6 +1,8 @@
 package com.cor.frii;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cor.frii.persistence.DatabaseClient;
 import com.cor.frii.persistence.entity.ECart;
 import com.cor.frii.pojo.ProductStaff;
+import com.cor.frii.utils.CartChangeColor;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -104,6 +107,7 @@ public class GasProductDetailAdapter extends RecyclerView.Adapter<GasProductDeta
                                 .getCartDao()
                                 .addCart(eCart);
                         Toast.makeText(context, "Agregado al Carrito", Toast.LENGTH_LONG).show();
+                        CartChangeColor.flo_cart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#d50000")));
                     } else {
                         Toast.makeText(context, "Ingrese una cantidad mayor a 0", Toast.LENGTH_LONG).show();
                     }
