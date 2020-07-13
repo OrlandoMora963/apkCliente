@@ -26,12 +26,15 @@
     <string name="back_forgotted_password">Atras</string>
     <string name="send_forgotted_password">Enviar</string>
 
-    <string name="warning">Se recomienda realizar pedidos indendientes por  cada producto.</string>
+    <string name="warning">Se recomienda realizar pedidos independientes por  cada producto.</string>
 
 
     <!-- procesar pedido cart activity-->
-    <string name="pay_credit_card">Pagar con tarjeta</string>
-    <string name="pay_money">Pagar en efectivo</string>
+    <string name="pay_credit_card">Pagaré con tarjeta en casa</string>
+    <string name="pay_money">Pagaré con efectivo en casa</string>
+
+
+    <string name="address">Escoge el lugar de entrega: </string>
 
 
 </resources>
