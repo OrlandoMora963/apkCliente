@@ -18,7 +18,6 @@
         android:layout_gravity="bottom|end"
         android:src="@drawable/ic_right_bold"
         app:backgroundTint="@color/fondoitems"
-
         android:id="@+id/siquiente_pedidos"
         />
 
