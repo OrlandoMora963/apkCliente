@@ -392,7 +392,7 @@ public class ProcesarpedidoFragment extends Fragment implements OnMapReadyCallba
             case "Factura":
                 comprobante = "factura";
                 break;
-            case "Pagar con targeta":
+            case "Pagar con tarjeta":
                 comprobante = "tarjeta";
                 break;
             default:

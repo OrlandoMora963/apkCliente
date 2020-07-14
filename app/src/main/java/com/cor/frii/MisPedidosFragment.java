@@ -193,7 +193,7 @@ public class MisPedidosFragment extends Fragment {
     }
 
     // Llenar información de pedidos
-    private void llenarPedidos() {
+    void llenarPedidos() {
         //--Usuario
         int token = new Session(getContext()).getToken();
         String url = this.baseURL + "/client/order/" + token;
@@ -209,6 +209,8 @@ public class MisPedidosFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            recyclerView.setAdapter(null);
+                            orders.clear();
                             int status = response.getInt("status");
                             if (status == 200) {
                                 JSONArray jsonArray = response.getJSONArray("data");
@@ -241,7 +243,7 @@ public class MisPedidosFragment extends Fragment {
                                     order.setDetalles(details);
                                     orders.add(order);
                                 }
-                                misPedidosAdapter = new MisPedidosAdapter(orders);
+                                misPedidosAdapter = new MisPedidosAdapter(orders,MisPedidosFragment.this);
                                 recyclerView.setAdapter(misPedidosAdapter);
                                 misPedidosAdapter.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -585,7 +587,7 @@ public class MisPedidosFragment extends Fragment {
                 public void run() {
                     JSONObject response = (JSONObject) args[0];
                     try {
-
+                        recyclerView.setAdapter(null);
                         int status = response.getInt("status");
                         if (status == 200) {
                             JSONArray jsonArray = response.getJSONArray("data");
@@ -621,7 +623,7 @@ public class MisPedidosFragment extends Fragment {
 
                                 orders.add(order);
                             }
-                            misPedidosAdapter = new MisPedidosAdapter(orders);
+                            misPedidosAdapter = new MisPedidosAdapter(orders,MisPedidosFragment.this);
                             //    misPedidosAdapter.notifyDataSetChanged();
 
                             recyclerView.setAdapter(misPedidosAdapter);

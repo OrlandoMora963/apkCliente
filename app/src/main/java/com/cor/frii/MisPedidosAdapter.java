@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +57,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -70,14 +74,17 @@ public class MisPedidosAdapter extends RecyclerView.Adapter<MisPedidosAdapter.vi
     private View.OnClickListener listener;
     ViewGroup viewGroup;
     private Socket socket;
+    private MisPedidosFragment oMisPedidosFragment;
+
     public String HOST_NODEJS = "http://34.71.251.155:9000";
 
     public static final String TAG = "firebase";
     private final static int NOTIFICATION_ID = 0;
     private final static String CHANNEL_ID = "NOTIFICACION";
 
-    public MisPedidosAdapter(List<Order> data) {
+    public MisPedidosAdapter(List<Order> data,MisPedidosFragment oMisPedidosFragment) {
         this.data = data;
+        this.oMisPedidosFragment=oMisPedidosFragment;
     }
 
 
@@ -105,6 +112,7 @@ public class MisPedidosAdapter extends RecyclerView.Adapter<MisPedidosAdapter.vi
     @Override
     public void onBindViewHolder(@NonNull final viewHolder holder, final int position) {
         holder.titlePedido.setText(data.get(position).getDate());
+        holder.btnEliminar.setEnabled(false);
         switch (data.get(position).getStatus()) {
             case "wait":
                 holder.estadoPedido.setText("Buscando proveedor...");
@@ -130,7 +138,7 @@ public class MisPedidosAdapter extends RecyclerView.Adapter<MisPedidosAdapter.vi
                 holder.cancelar.setBackgroundResource(R.drawable.custom_button_repedir);
                 holder.mensaje.setVisibility(View.GONE);
                 holder.llamar.setVisibility(View.GONE);
-
+                holder.btnEliminar.setEnabled(true);
                 break;
         }
         StringBuilder details = new StringBuilder();
@@ -166,7 +174,58 @@ public class MisPedidosAdapter extends RecyclerView.Adapter<MisPedidosAdapter.vi
             holder.mensaje.setEnabled(false);
             holder.mensaje.setBackgroundResource(R.drawable.custom_button_gray);
         }
+        holder.btnEliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Acount acount = DatabaseClient.getInstance(context)
+                        .getAppDatabase()
+                        .getAcountDao()
+                        .getUser(new Session(context).getToken());
+                JSONObject jsonObject = new JSONObject();
+                RequestQueue queue = Volley.newRequestQueue(Objects.requireNonNull(context));
+                try {
+                    jsonObject.put("order_id", data.get(position).getId());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String url = "http://34.71.251.155/api/order/delete";
+                System.out.println(jsonObject.toString());
+                JsonObjectRequest jsonObjectRequest =
+                        new JsonObjectRequest(Request.Method.PUT, url, jsonObject, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
 
+                                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+                                oMisPedidosFragment.llenarPedidos();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Volley get", "error voley" + error.toString());
+                                NetworkResponse response = error.networkResponse;
+                                if (error instanceof ServerError && response != null) {
+                                    try {
+                                        String res = new String(response.data, HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                        System.out.println(res);
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }) {
+                            @Override
+                            public Map<String, String> getHeaders() {
+                                Map<String, String> headers = new HashMap<>();
+                                headers.put("Authorization", "JWT " + acount.getToken());
+                                headers.put("Content-Type", "application/json");
+                                return headers;
+                            }
+                        };
+
+                queue.add(jsonObjectRequest);
+            }
+        });
         if (data.get(position).getStatus().equals("cancel")) {
             holder.cancelar.setText("Repedir");
             holder.cancelar.setBackgroundResource(R.drawable.custom_button_repedir);
@@ -281,7 +340,7 @@ public class MisPedidosAdapter extends RecyclerView.Adapter<MisPedidosAdapter.vi
         CountDownTimer timer;
         boolean timerflag = false;
         TextView timerAuto;
-
+ImageButton btnEliminar;
         viewHolder(@NonNull View itemView) {
             super(itemView);
             titlePedido = itemView.findViewById(R.id.TitlePedidos);
@@ -292,6 +351,7 @@ public class MisPedidosAdapter extends RecyclerView.Adapter<MisPedidosAdapter.vi
             mensaje = itemView.findViewById(R.id.ButtonMensajePedido);
             cancelar = itemView.findViewById(R.id.ButtonCancelarPedido);
             btnRepedir = itemView.findViewById(R.id.buttonRepedir);
+            btnEliminar = itemView.findViewById(R.id.btnEliminar);
             timerAuto = itemView.findViewById(R.id.timerAuto);
         }
     }
