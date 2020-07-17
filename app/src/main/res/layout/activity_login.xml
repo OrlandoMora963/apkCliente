@@ -7,8 +7,6 @@
     android:gravity="center"
     android:background="@color/frii_Background"
     android:orientation="vertical">
-
-
     <LinearLayout
         android:id="@+id/linearLayout7"
         android:layout_width="match_parent"
