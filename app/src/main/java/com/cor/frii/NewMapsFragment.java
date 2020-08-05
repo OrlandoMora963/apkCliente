@@ -188,24 +188,26 @@ private  int RamdomHelp= -1;
                         for (Mensaje item : ListMessage) {
                             item.setImage("http://34.71.251.155/"+item.getImage());
                         }
+                        if(ListMessage.size()>0) {
+                            final Handler handler = new Handler();
 
-                        final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                public void run() {
+                                    // download your images here
+                                    Random random = new Random();
+                                    int randomIndex = random.nextInt(ListMessage.size());
 
-                        handler.postDelayed(new Runnable(){
-                            public void run(){
-                                // download your images here
-                                Random random = new Random();
-                                int  randomIndex = random.nextInt(ListMessage.size());
-
-                                while (RamdomHelp==randomIndex)
-                                    randomIndex = random.nextInt(ListMessage.size());
+                                    while (RamdomHelp == randomIndex)
+                                        randomIndex = random.nextInt(ListMessage.size());
 
                                     Picasso.get().load(ListMessage.get(randomIndex).getImage()).into(imgvMensajes);
-                                RamdomHelp =randomIndex;
-                                handler.postDelayed(this, 3000);
+                                    RamdomHelp = randomIndex;
+                                    if( ListMessage.size()>1)
+                                    handler.postDelayed(this, 2500);
 
-                            }
-                        }, 100);
+                                }
+                            }, 100);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
