@@ -238,7 +238,7 @@ public class MisPedidosFragment extends Fragment {
                                     List<String> details = new ArrayList<>();
                                     for (int j = 0; j < details_data.length(); j++) {
                                         JSONObject jsonObject1 = details_data.getJSONObject(j);
-                                        details.add(jsonObject1.getString("description"));
+                                        details.add(jsonObject1.getJSONObject("product_id").getString("description"));
                                     }
                                     order.setDetalles(details);
                                     orders.add(order);
