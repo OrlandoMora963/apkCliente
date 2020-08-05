@@ -215,7 +215,7 @@ public class CartdetailFragment extends Fragment implements CartDetailAdapter.Ev
             if (eCarts != null) {
                 for (ECart e : eCarts) {
                     JSONObject orders_detal = new JSONObject();
-                    orders_detal.put("description", e.getName());
+                    orders_detal.put("product_id", e.getProductRegister());
                     orders_detal.put("quantity", e.getCantidad());
                     orders_detal.put("unit_price", e.getPrice());
                     jsonArray.put(orders_detal);
